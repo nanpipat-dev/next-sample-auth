@@ -19,6 +19,16 @@ const postSignUpWithPassword = (authSignUpPasswordData: AuthSignUpPassword): Axi
   },
 })
 
+const getProfile = (): AxiosPromise<any> => httpClient({
+  method:'get',
+  url:`${API_URL}/api/v1/validate`
+})
+
+const postLogout =():AxiosPromise<any> => httpClient({
+  method:'post',
+  url: `${BASE_URL}/api/logout`,
+})
+
 const postRefreshToken = (): AxiosPromise<any> => httpClient({
   method: 'post',
   url: `${BASE_URL}/api/refresh-token`,
@@ -51,6 +61,8 @@ const serverPostRefreshToken = (refreshToken: AuthRefreshToken): AxiosPromise<an
 export default {
   postLoginWithUsernameAndPassword,
   postSignUpWithPassword,
+  getProfile,
+  postLogout,
   postRefreshToken,
   serverPostLoginWithUsernameAndPassword,
   serverPostSignUpWithPassword,

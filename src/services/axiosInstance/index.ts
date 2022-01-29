@@ -1,5 +1,6 @@
 
 import axios from 'axios'
+import authServiceApi from '../api/auth-service.api'
 // import authServiceApi from '../api/auth-service.api'
 
 import {
@@ -26,18 +27,18 @@ httpClient.interceptors.response.use(responseInterceptor, async (error) => {
 
   if (status === 401) {
     // will loop if refreshToken returns 401
-    // try {
-    //   const data = await authServiceApi.postRefreshToken()
-    //   console.log(data, 'data', error.config)
-    //   const accessToken = data.data.token
-    //   if (accessToken) {
-    //     error.config.headers['Authorization'] = `Bearer ${accessToken}`
-    //   }
-    //   console.log(data, 'data', error.config)
-    //   return httpClient.request(error.config)
-    // } catch (_error) {
-    //   return Promise.reject(_error)
-    // }
+    try {
+      const data = await authServiceApi.postRefreshToken()
+      console.log(data, 'data', error.config)
+      const accessToken = data.data.token
+      if (accessToken) {
+        error.config.headers['Authorization'] = `${accessToken}`
+      }
+      console.log(data, 'data', error.config)
+      return httpClient.request(error.config)
+    } catch (_error) {
+      return Promise.reject(_error)
+    }
   }
 
   return Promise.reject(error)

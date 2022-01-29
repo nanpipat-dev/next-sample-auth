@@ -1,13 +1,80 @@
+import authServiceApi from '@/services/api/auth-service.api'
 import classNames from 'classnames'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import style from './auth-style.module.scss'
+import { useRouter } from 'next/router'
 
-function AuthComponent(): JSX.Element {
-  const [form, setForm] = useState('signup')
+type AuthComponentProps = {
+  state?: string
+}
 
-  //   function onClick(e): void {
-  //     let parent = style['login']
-  //   }
+function AuthComponent(props: AuthComponentProps): JSX.Element {
+  const [form, setForm] = useState('login')
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+
+  const [usernameLogin, setUsernameLogin] = useState('')
+  const [passwordLogin, setPasswordLogin] = useState('')
+
+  const router = useRouter()
+
+  const {state} =props
+
+  useEffect(() => {
+    if(state === 'login') {
+      setForm('signup')
+    }
+  },[])
+
+  async function handleSubmitSignup(): Promise<void> {
+    
+    try {
+      console.log(username, password, firstName, lastName, 'info')
+      await authServiceApi.postSignUpWithPassword({
+        username,
+        password,
+        firstName,
+        lastName,
+      })
+      router.reload()
+    } catch (error) {
+      console.log(error?.response?.data || 'error', 'asdasdasd')
+      alert(error?.response?.data || 'error')
+    }
+  }
+
+  async function handleSubmitLogin(): Promise<void> {
+    try {
+      await authServiceApi.postLoginWithUsernameAndPassword({
+        username: usernameLogin,
+        password: passwordLogin,
+      })
+      router.reload()
+    } catch (error) {
+      console.log(error?.response?.data || 'error', 'asdasdasd')
+      alert(error?.response?.data || 'error')
+    }
+  }
+
+  function setToLogin(): void {
+    setForm('login')
+    setUsernameLogin('')
+    setPasswordLogin('')
+  }
+
+  function setToSignUp(): void {
+    setForm('signup')
+    setUsername('')
+    setPassword('')
+    setFirstName('')
+    setLastName('')
+  }
+
+ 
+
   return (
     <>
       <div className={style['form-structor']}>
@@ -20,26 +87,35 @@ function AuthComponent(): JSX.Element {
           <h2
             className={style['form-title']}
             id="signup"
-            onClick={() => setForm('login')}
+            onClick={() => setToLogin()}
           ><span>or</span>Sign up</h2>
           <div className={style['form-holder']}>
             <input
               type="text"
               className={style['input']}
-              placeholder="Name"
-            />
-            <input
-              type="email"
-              className={style['input']}
-              placeholder="Email"
+              placeholder="Username"
+              onChange={(e) => setUsername(e.target.value)}
             />
             <input
               type="password"
               className={style['input']}
               placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <input
+              type="text"
+              className={style['input']}
+              placeholder="First Name"
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+            <input
+              type="text"
+              className={style['input']}
+              placeholder="Last Name"
+              onChange={(e) => setLastName(e.target.value)}
             />
           </div>
-          <button className={style['submit-btn']}>Sign up</button>
+          <button className={style['submit-btn']} onClick={handleSubmitSignup}>Sign up</button>
         </div>
 
         <div className={classNames(
@@ -51,21 +127,23 @@ function AuthComponent(): JSX.Element {
             <h2
               className={style['form-title']}
               id="login"
-              onClick={() => setForm('signup')}
+              onClick={() => setToSignUp()}
             ><span>or</span>Log in</h2>
             <div className={style['form-holder']}>
               <input
-                type="email"
+                type="text"
                 className={style['input']}
-                placeholder="Email"
+                placeholder="Username"
+                onChange={(e) => setUsernameLogin(e.target.value)}
               />
               <input
                 type="password"
                 className={style['input']}
                 placeholder="Password"
+                onChange={(e) => setPasswordLogin(e.target.value)}
               />
             </div>
-            <button className={style['submit-btn']}>Log in</button>
+            <button className={style['submit-btn']} onClick={handleSubmitLogin}>Log in</button>
           </div>
         </div>
 

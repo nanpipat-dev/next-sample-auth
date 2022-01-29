@@ -15,13 +15,8 @@ export type AuthRefreshToken = {
 }
 
 export type ProfileGlobal = {
-  customerNumber?: string
-  memberId?: string,
-  email: string,
+  memberId:string,
+  username: string,
   firstName: string,
   lastName: string,
-  username?: string,
-  profileImage?: string,
-  verify?: boolean,
-  isCreatedPassword?: boolean,
 }

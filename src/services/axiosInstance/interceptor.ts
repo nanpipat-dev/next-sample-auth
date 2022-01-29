@@ -15,7 +15,7 @@ const requestInterceptor = (config: AxiosRequestConfig): AxiosRequestConfig => {
 //   const typeToken = 'Bearer'
   config.headers = {
     ...config.headers,
-    ...((accessToken !== null && accessToken !== undefined) && { Authorization: `${tokenType} ${accessToken}` }),
+    ...((accessToken !== null && accessToken !== undefined) && { Authorization: `${accessToken}` }),
   }
   if (config.params) {
     config.params = kebabCaseKeys(config.params)

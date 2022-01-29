@@ -8,6 +8,7 @@ import PageLoading from '@/components/loading/PageLoading'
 import ComponentLoading from '@/components/loading/ComponentLoading'
 import { GlobalProvider, useGlobal } from '@/hooks/Global/GlobalContext'
 import authServiceApi from '@/services/api/auth-service.api'
+import { ProfileGlobal } from '@/models/auth-service.model'
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   // states
@@ -82,35 +83,29 @@ function AppComponent(props: Record<string, any>): JSX.Element {
     }
   }, [isMount])
 
-  // async function getProfile(): Promise<void> {
-  //   try {
-  //     const profile = await authServiceApi.getProfile()
-  //     if (profile?.data) {
-  //       const defaultImage = `/image/profile/img_profile_${profile.data.customerNumber?.charAt(0) || 0}.jpg`
-  //       const memberResponse: ProfileGlobal = {
-  //         memberId: profile.data.memberId,
-  //         email: profile.data.email,
-  //         firstName: profile.data.firstName,
-  //         lastName: profile.data.lastName,
-  //         username: profile.data.username,
-  //         verify: profile.data.isVerify,
-  //         isCreatedPassword: profile.data.isCreatedPassword,
-  //         profileImage: profile.data.profileImage ? profile.data.profileImage : defaultImage,
-  //         customerNumber: profile.data.customerNumber,
-  //       }
-  //       setMember(memberResponse)
-  //     }
+  async function getProfile(): Promise<void> {
+    try {
+      const profile = await authServiceApi.getProfile()
+      if (profile?.data) {
+        const memberResponse: ProfileGlobal = {
+          memberId: profile.data.memberId,
+          username: profile.data.username,
+          firstName: profile.data.firstName,
+          lastName: profile.data.lastName,
+        }
+        setMember(memberResponse)
+      }
 
-  //   } catch (error) {
-  //     console.log(error)
-  //   } finally {
-  //     console.log('success')
-  //   }
-  // }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      console.log('success')
+    }
+  }
   useEffect(() => {
     if (isLoggedIn) {
       setIsAuth(true)
-      // getProfile()
+      getProfile()
     }
 
   }, [isLoggedIn])
