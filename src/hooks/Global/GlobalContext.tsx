@@ -18,12 +18,9 @@ type ContextType = {
 
 const memberDefault: ProfileGlobal = {
   memberId: '',
-  email: '',
   firstName: '',
   lastName: '',
   username: '',
-  verify: false,
-  isCreatedPassword: true,
 }
 
 const globalContextType: ContextType = {
